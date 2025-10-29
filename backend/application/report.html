@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .container {
+            background: linear-gradient(to right, #1d1d1d, #444444);
+            color: #ffffff;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ffffff55;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #333333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Dr. {{ doctor.name }} - Monthly Patient Report</h1>
+        </header>
+
+        <main>
+            <h3>Month: {{ month_name }} {{ year }}</h3>
+            <hr>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Patient Name</th>
+                        <th>Appointment Date</th>
+                        <th>Diagnosis</th>
+                        <th>Prescription / Treatment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for a in appointments %}
+                    <tr>
+                        <td>{{ a.user.name }}</td>
+                        <td>{{ a.date.strftime('%d-%m-%Y') }}</td>
+
+                        <td>
+                            {% if a.treatment %}
+                                {{ a.treatment[0].diagnosis }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if a.treatment %}
+                                {{ a.treatment[0].prescription }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <p>Regards,<br><b>Hospital Team</b></p>
+        </main>
+
+        <footer>
+            <small>This is an automated report.</small>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,16 +1,38 @@
-# Python (backend)
-backend/venv/
-backend/__pycache__/
-backend/.env
+# Python
+*.pyc
+__pycache__/
+*/__pycache__/
 
-# Node.js (frontend)
-frontend/node_modules/
+# Virtual environments
+venv/
+backend/venv/
+
+# Environment files
+*.env
+backend/.env
 frontend/.env
+
+# SQLite database
+backend/database.sqlite3
+
+# Celery Beat schedule file
+backend/celerybeat-schedule*
+celerybeat-schedule*
+*.pid
+
+# Flask instance folder (runtime files)
+backend/instance/
+
+# Node.js packages
+frontend/node_modules/
 
 # OS-specific files
 .DS_Store
 Thumbs.db
 
-# VS Code configs (optional)
+# VS Code
 .vscode/
 
+# Optional: Ignore log files
+*.log
+logs/
