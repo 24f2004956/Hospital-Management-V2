@@ -7,7 +7,6 @@ from ..api1 import cache
 class DoctorApi(Resource):
     #read
     @jwt_required()
-    @cache.cached(timeout=300)
     def get(self):
         # Get optional query param for department
         department_id = request.args.get('department_id', type=int)
@@ -66,7 +65,7 @@ class DoctorApi(Resource):
             return {'message': 'Access denied!'}, 403
         
         data=request.get_json()
-        if not (data.get('name') and data.get('email') and data.get('password')):
+        if not (data.get('name') and data.get('email')):
             return {'message' : 'Bad request! all the data fields are required.'}, 400
         
         if len(data.get('name').strip()) > 50 or len(data.get('name').strip()) < 3 :
@@ -75,8 +74,6 @@ class DoctorApi(Resource):
         if len(data.get('email').strip()) > 60 or "@" not in data.get('email') :
             return {'message' : 'email should contain @ and should be in less than 60 character'}
         
-        if len(data.get('password').strip()) > 20 or len(data.get('password').strip()) < 6 :
-            return {'message' : 'password should be in between 6-20 charcters long'}
 
         doctor=Doctor.query.get(doctor_id)
         if  not doctor:
@@ -84,13 +81,12 @@ class DoctorApi(Resource):
         
         doctor.name=data.get('name').strip()
         doctor.email=data.get('email').strip()
-        doctor.password=data.get('password').strip()
         doctor.department_id=data.get('department_id')
-        doctor.profile=data.get('profile').strip()
-        doctor.contact=data.get('contact').strip()
+        doctor.profile=data.get('profile')
+        doctor.contact=data.get('contact')
         doctor.experience_years=data.get('experience_years')
-        doctor.qualification=data.get('qualification').strip()
-        doctor.about=data.get('about').strip()
+        doctor.qualification=data.get('qualification')
+        doctor.about=data.get('about')
         db.session.commit()
         return {'message' : 'Doctor details updated successfully'}, 200    
      

@@ -7,7 +7,7 @@ from ..api1 import cache
 class DepartmentApi(Resource):
     #read
     @jwt_required()
-    @cache.cached(timeout=300)
+    #@cache.cached(timeout=300)
     def get(self):
         departments = Department.query.all()
         print(departments)

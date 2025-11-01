@@ -1,11 +1,13 @@
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt
-from ..models import db, Doctor, User
+from ..models import db, User
+from ..api1 import cache
 
 class PatientApi(Resource):
     #read
     @jwt_required()
+    #@cache.cached(timeout=300)
     def get(self):
         patients = User.query.filter_by(role = "patient").all()
         print(patients)
@@ -39,7 +41,6 @@ class PatientApi(Resource):
         
         patient.name=data.get('name').strip()
         patient.email=data.get('email').strip()
-        patient.password=data.get('password').strip()
         patient.profile=data.get('profile')
         patient.contact=data.get('contact')
         patient.age=data.get('age')

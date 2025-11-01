@@ -11,6 +11,7 @@ from application.api.treatment import TreatmentAdd, DoctorPatientHistory, Patien
 from application.api.availablility import  DoctorAvailabilityAPI
 from application.worker import celery
 from application.task import *
+#from flask_cors import CORS
 
 from application.api1 import WelcomeApi, cache
 from datetime import timedelta, datetime
@@ -20,6 +21,9 @@ base_dir = os.path.abspath(os.path.dirname(__file__))
 
 
 app=Flask(__name__)
+#CORS(app, supports_credentials=True)
+#CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}})
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + os.path.join(base_dir, "database.sqlite3")
 app.config["SECRET_KEY"] = "hospital-apps-secret" # protects sessions, cookies, and tokens from being tampered with.
@@ -79,7 +83,7 @@ def add_admin():
         print('admin already exist in database')
         
 if __name__=='__main__':
-    #db.drop_all()
+    #db.drop_all() toggle b/w drop_all() and add admin
     add_admin()
     db.create_all()
     app.run(debug=True)

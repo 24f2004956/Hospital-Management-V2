@@ -26,6 +26,7 @@ class User(db.Model):
             "name": self.name,
             "email": self.email,
             "role": self.role,
+            "black_list_status": self.black_list_status,
             "profile": self.profile,
             "age": self.age,
             "gender": self.gender,
@@ -55,12 +56,13 @@ class Doctor(db.Model):
             "name": self.name,
             "email": self.email,
             "department_id": self.department_id,
+            "department_name": self.department.name,
+            "black_list_status":self.black_list_status,
             "profile": self.profile, 
             "contact": self.contact,
             "experience_years": self.experience_years,
             "qualification": self.qualification,
             "about": self.about,
-            "department_id": self.department_id,
         }
 
 class DoctorAvailability(db.Model):
@@ -109,6 +111,9 @@ class Appointment(db.Model):
             "id": self.id,
             "doctor_id": self.doctor_id,
             "patient_id": self.patient_id,
+            "doctor_name": self.doctor.name,
+            "patient_name": self.user.name,
+            "department_name": self.doctor.department.name,
             "date": self.date.strftime("%Y-%m-%d"),   #strftime 
             "time": self.time.strftime("%I:%M %p"),
             "status": self.status,

@@ -1,8 +1,9 @@
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt
-from datetime import datetime
+from datetime import datetime, date
 from ..models import db, Appointment, DoctorAvailability
+from ..api1 import cache
 
 class AppointmentApi(Resource):
     @jwt_required()
@@ -128,6 +129,7 @@ class AppointmentApi(Resource):
         }, 200
     
     @jwt_required()
+    @cache.cached(timeout=300)
     def get(self):
         current_user = get_jwt()
         role = current_user.get('role')
@@ -137,8 +139,7 @@ class AppointmentApi(Resource):
         elif role == 'doctor':
             appointments = Appointment.query.filter_by(doctor_id=current_user.get('sub')).all()
         else:  # admin
-            appointments = Appointment.query.all()
-
+            appointments = Appointment.query.filter(Appointment.date >= date.today(), Appointment.status == 'Booked'  ).all()
         appointment_json = []
         for appointment in appointments:
             appointment_json.append(appointment.convert_to_json())

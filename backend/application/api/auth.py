@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 from ..models import db, User, Doctor
+from ..api1 import cache
 
 
 class LoginApi(Resource):
@@ -47,7 +48,7 @@ class LoginApi(Resource):
         if current_user.get('role') != 'admin':
             return {'message': 'Access denied!'}, 403
 
-        if account_type == "user":
+        if account_type == "patient":
             account = User.query.get(account_id)
         elif account_type == "doctor":
             account = Doctor.query.get(account_id)
