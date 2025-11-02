@@ -17,13 +17,14 @@ class User(db.Model):
     gender = Column(String(10))
     address = Column(String(120))
 
-    appointment = db.relationship('Appointment', backref='user')
+    appointment = db.relationship('Appointment', backref='user',cascade="all, delete-orphan")
   
 
     def convert_to_json(self):
         return {
             "id": self.id,
             "name": self.name,
+            "patient_name": self.name,
             "email": self.email,
             "role": self.role,
             "black_list_status": self.black_list_status,
@@ -40,14 +41,15 @@ class Doctor(db.Model):
     password = Column(String(20), nullable=False)
     role = Column(String(20), nullable=False, default="doctor") # patient, doctor, admin(hospital staff)
     black_list_status=Column(String(20), nullable=False, default="deactive" ) # deactive, active(blacklisted)
-    department_id = Column(Integer, ForeignKey('department.id'), nullable=False)
+    department_id = Column(Integer, ForeignKey('department.id', ondelete="CASCADE"), nullable=False)
     contact = Column(String(15))
     profile = Column(String(200))
     experience_years = Column(Integer) 
     qualification = Column(String(50))
     about = Column(String(150))
     
-    appointment = db.relationship('Appointment', backref='doctor')
+    appointment = db.relationship('Appointment', backref='doctor',cascade="all, delete-orphan")
+    availability = db.relationship('DoctorAvailability', backref='doctor', cascade="all, delete-orphan")
 
 
     def convert_to_json(self):
@@ -67,9 +69,9 @@ class Doctor(db.Model):
 
 class DoctorAvailability(db.Model):
     id = Column(Integer, primary_key=True)
-    doctor_id = Column(Integer, ForeignKey('doctor.id'), nullable=False)
+    doctor_id = Column(Integer, ForeignKey('doctor.id', ondelete="CASCADE"), nullable=False)
     date = Column(Date, nullable=False)
-    start_time = Column(Time, nullable=False)
+    start_time = Column(Time, nullable=False,)
     end_time = Column(Time, nullable=False)
     status = Column(String(20), default='available')  # available  booked  unavailable
 
@@ -85,7 +87,7 @@ class DoctorAvailability(db.Model):
 
 class Department(db.Model):
     id = Column(Integer, primary_key=True)
-    doctor = db.relationship('Doctor', backref='department')
+    doctor = db.relationship('Doctor', backref='department',)
     name = Column(String(50), nullable=False)
     description = Column(String(120),  nullable=False)
 
@@ -98,13 +100,13 @@ class Department(db.Model):
 
 class Appointment(db.Model):
     id = Column(Integer, primary_key=True)
-    doctor_id = Column(Integer, ForeignKey('doctor.id'), nullable=False)
-    patient_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    doctor_id = Column(Integer, ForeignKey('doctor.id', ondelete="CASCADE"), nullable=False)
+    patient_id = Column(Integer, ForeignKey('user.id', ondelete="CASCADE"), nullable=False )
     date = Column(Date, nullable=False, default=datetime.utcnow)
     time = Column(Time, nullable=True)
     status = Column(String(20),nullable=False,default='Booked') # Booked ,Completed, Cancelled
     reason = Column(String(150))
-    treatment = db.relationship('Treatment', backref='appointment')
+    treatment = db.relationship('Treatment', backref='appointment',cascade="all, delete-orphan")
 
     def convert_to_json(self):
         return {
@@ -122,7 +124,7 @@ class Appointment(db.Model):
 
 class Treatment(db.Model):
     id = Column(Integer, primary_key=True)
-    appointment_id = Column(Integer, ForeignKey('appointment.id'), nullable=False)
+    appointment_id = Column(Integer, ForeignKey('appointment.id',ondelete="CASCADE"), nullable=False)
     diagnosis = Column(String(100), nullable=False)
     prescription = Column(String(200), nullable=False)
     notes = Column(String(200))
@@ -132,12 +134,24 @@ class Treatment(db.Model):
 
     def convert_to_json(self):
         return {
-            "id": self.id,
-            "appointment_id": self.appointment_id,
-            "diagnosis": self.diagnosis,
-            "prescription": self.prescription,
-            "notes": self.notes,
-            "visit_type": self.visit_type,
-            "test_done": self.test_done,
-            "medicines": self.medicines
+        "id": self.id,
+        "appointment_id": self.appointment_id,
+
+        # IDs for filtering
+        "patient_id": self.appointment.patient_id,
+        "doctor_id": self.appointment.doctor_id,
+
+        # Display names
+        "patient_name": self.appointment.user.name if self.appointment and self.appointment.user else None,
+        "doctor_name": self.appointment.doctor.name if self.appointment and self.appointment.doctor else None,
+        "department_name": self.appointment.doctor.department.name if self.appointment and self.appointment.doctor and self.appointment.doctor.department else None,
+
+
+        # Treatment Data
+        "diagnosis": self.diagnosis,
+        "prescription": self.prescription,
+        "notes": self.notes,
+        "visit_type": self.visit_type,
+        "test_done": self.test_done,
+        "medicines": self.medicines,
         }

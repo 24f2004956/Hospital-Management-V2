@@ -97,7 +97,7 @@ class AppointmentApi(Resource):
             return {'message': 'Appointment not found.'}, 404
 
         # Only doctor of that appointment or admin can update
-        if current_user.get('role') == 'doctor' and appointment.doctor_id != current_user.get('sub'):
+        if current_user.get('role') == 'doctor' and appointment.doctor_id != int(current_user.get('sub')):
             return {'message': 'You are not authorized to update this appointment.'}, 403
 
         data = request.get_json()
@@ -129,7 +129,7 @@ class AppointmentApi(Resource):
         }, 200
     
     @jwt_required()
-    @cache.cached(timeout=300)
+    #@cache.cached(timeout=300)
     def get(self):
         current_user = get_jwt()
         role = current_user.get('role')
@@ -137,7 +137,7 @@ class AppointmentApi(Resource):
         if role == 'patient':
             appointments = Appointment.query.filter_by(patient_id=current_user.get('sub')).all()
         elif role == 'doctor':
-            appointments = Appointment.query.filter_by(doctor_id=current_user.get('sub')).all()
+            appointments = Appointment.query.filter(Appointment.doctor_id == int(current_user.get('sub')),Appointment.date >= date.today(),Appointment.status == 'Booked').all()
         else:  # admin
             appointments = Appointment.query.filter(Appointment.date >= date.today(), Appointment.status == 'Booked'  ).all()
         appointment_json = []

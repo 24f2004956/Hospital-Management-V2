@@ -1,21 +1,37 @@
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt
-from ..models import db, User
+from ..models import db, User, Appointment, Doctor
 from ..api1 import cache
 
 class PatientApi(Resource):
     #read
     @jwt_required()
-    #@cache.cached(timeout=300)
     def get(self):
-        patients = User.query.filter_by(role = "patient").all()
-        print(patients)
+        current_user = get_jwt()
+        role = current_user.get('role')
+        
+        if role == "doctor":
+            doctor_id = int(current_user.get('sub'))
 
-        patient_json = []
-        for patient in patients:
-            patient_json.append(patient.convert_to_json())
-        return patient_json, 200    
+            appointments = Appointment.query.filter_by(doctor_id=doctor_id).all()
+            patient_ids = {appt.patient_id for appt in appointments}
+
+            patients = User.query.filter(User.id.in_(patient_ids)).all()
+            return [p.convert_to_json() for p in patients], 200
+
+        if role == "admin":
+            patients = User.query.filter_by(role="patient").all()
+            return [p.convert_to_json() for p in patients], 200
+        
+        if role == 'patient':
+            user_id = int(current_user.get('sub'))
+            patient = User.query.get(user_id)
+            return patient.convert_to_json(), 200
+
+        return {"message": "Unauthorized"}, 403
+
+
     
    
     # update 

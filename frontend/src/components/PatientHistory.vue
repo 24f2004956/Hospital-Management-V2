@@ -5,24 +5,19 @@
 
         <div class="modal-header">
           <h5 class="modal-title">
-            Patient History - {{ appointment.patient_name }}
+            Patient History - {{ patient?.name || appointment?.patient_name }}
           </h5>
           <button class="btn-close" @click="$emit('close')"></button>
         </div>
 
         <div class="modal-body">
-
-          <p><strong>Doctor:</strong> {{ appointment.doctor_name }}</p>
-          <p><strong>Department:</strong> {{ appointment.department_name }}</p>
-
           <hr>
-
           <table class="table table-bordered text-center">
             <thead class="table-dark">
               <tr>
                 <th>Visit No</th>
-                <th>Visit Type</th>
-                <th>Test Done</th>
+                <th>Doctor</th>
+                <th>Department</th>
                 <th>Diagnosis</th>
                 <th>Prescription</th>
                 <th>Medicines</th>
@@ -32,8 +27,8 @@
             <tbody>
               <tr v-for="(item, index) in filteredHistory" :key="item.id">
                 <td>{{ index + 1 }}</td>
-                <td>{{ item.visit_type || 'N/A' }}</td>
-                <td>{{ item.test_done || 'N/A' }}</td>
+                <td>{{ item.doctor_name }}</td>
+                <td>{{ item.department_name }}</td>
                 <td>{{ item.diagnosis }}</td>
                 <td>{{ item.prescription }}</td>
                 <td>{{ item.medicines || 'N/A' }}</td>
@@ -58,27 +53,52 @@
 
 <script>
 export default {
-  props: ["appointment"],
+  props: ["appointment", "patient"],
   data() {
     return {
-      history: []
+      history: [],
     };
   },
   computed: {
     filteredHistory() {
-      return this.history.filter(item => item.appointment_id === this.appointment.id);
+      // Determine patient ID
+      const patientId = this.patient?.id || this.appointment?.patient_id;
+
+      if (!patientId) return [];
+
+      // Filter all history of that one patient
+      return this.history.filter(item => item.patient_id === patientId);
     }
   },
   async mounted() {
-    const response = await fetch('/api/treatment/all', {
+    let token = null;
+    let url = null;
+
+    if (localStorage.getItem('adminToken')) {
+      token = localStorage.getItem('adminToken');
+      url = '/api/treatment/admin';
+    }
+    else if (localStorage.getItem('doctorToken')) {
+      token = localStorage.getItem('doctorToken');
+      url = '/api/treatment/doctor';
+    }
+    else if (localStorage.getItem('patientToken')) {
+      token = localStorage.getItem('patientToken');
+      url = '/api/treatment/patient';
+    }
+    else {
+      return;
+    }
+
+    const response = await fetch(url, {
       headers: {
-        "Authorization": `Bearer ${localStorage.getItem('adminToken')}`
+        "Authorization": `Bearer ${token}`
       }
     });
 
     this.history = await response.json();
   }
-}
+};  
 </script>
 
 <style scoped>

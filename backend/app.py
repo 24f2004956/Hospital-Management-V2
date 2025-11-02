@@ -8,7 +8,7 @@ from application.api.patient import PatientApi
 from application.api.department import DepartmentApi
 from application.api.appointment import AppointmentApi
 from application.api.treatment import TreatmentAdd, DoctorPatientHistory, PatientTreatmentHistory, AdminTreatmentHistory, ExportDataAPI
-from application.api.availablility import  DoctorAvailabilityAPI
+from application.api.availablility import  DoctorAvailabilityAPI, DoctorAvailabilityWeekAPI
 from application.worker import celery
 from application.task import *
 #from flask_cors import CORS
@@ -61,8 +61,9 @@ api.add_resource(AppointmentApi, '/api/appointment', '/api/appointment/<int:appo
 api.add_resource(TreatmentAdd, '/api/treatment/<int:appointment_id>',)
 api.add_resource(DoctorPatientHistory, '/api/treatment/doctor',)
 api.add_resource(PatientTreatmentHistory, '/api/treatment/patient',)
-api.add_resource(AdminTreatmentHistory, '/api/treatment/all',)
+api.add_resource(AdminTreatmentHistory, '/api/treatment/admin',)
 api.add_resource(DoctorAvailabilityAPI, '/api/availability',)
+api.add_resource(DoctorAvailabilityWeekAPI, '/api/availability-week')
 api.add_resource(ExportDataAPI, '/api/treatment/export',)
 
 

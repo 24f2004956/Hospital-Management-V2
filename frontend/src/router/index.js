@@ -8,6 +8,8 @@ import AdminDashboard from '@/components/AdminDashboard.vue'
 import DoctorRegister from '@/components/DoctorRegister.vue'
 import BlackListed from '@/components/BlackListed.vue'
 import CreateDepartment from '@/components/CreateDepartment.vue'
+import DoctorDashboard from '@/components/DoctorDashboard.vue'
+import DoctorAvailability from '@/components/DoctorAvailability.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,7 +58,17 @@ const router = createRouter({
       path: '/create-department',
       name: 'create-department',
       component: CreateDepartment
-    }
+    },
+    {
+      path: '/doctor-dashboard',
+      name: 'doctor-dashboard',
+      component: DoctorDashboard,
+    },
+    {
+      path: '/doctor-availability',
+      name: 'doctor-availability',  
+      component: DoctorAvailability,
+    },
 
   ],
 })
