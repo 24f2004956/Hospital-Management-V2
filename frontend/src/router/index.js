@@ -10,6 +10,9 @@ import BlackListed from '@/components/BlackListed.vue'
 import CreateDepartment from '@/components/CreateDepartment.vue'
 import DoctorDashboard from '@/components/DoctorDashboard.vue'
 import DoctorAvailability from '@/components/DoctorAvailability.vue'
+import PatientDashboard from '@/components/PatientDashboard.vue'
+import PatienProfileUpdate from '@/components/PatienProfileUpdate.vue'
+import HistoryExport from '@/components/HistoryExport.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -69,6 +72,21 @@ const router = createRouter({
       name: 'doctor-availability',  
       component: DoctorAvailability,
     },
+    {
+      path: '/patient-dashboard',
+      name: 'patient-dashboard',
+      component: PatientDashboard,
+    },
+    {
+      path: '/patient-profile-update',
+      name: 'patient-profile-update',
+      component: PatienProfileUpdate,
+    },
+    {
+      path: '/history-export',
+      name: 'history-export',
+      component: HistoryExport,
+    }
 
   ],
 })

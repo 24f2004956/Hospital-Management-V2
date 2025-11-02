@@ -4,7 +4,7 @@ from flask_jwt_extended import JWTManager
 from application.models import db, User
 from application.api.auth import LoginApi, RegisterApi
 from application.api.doctor import DoctorApi
-from application.api.patient import PatientApi
+from application.api.patient import PatientApi, PatientProfileUpdateAPI
 from application.api.department import DepartmentApi
 from application.api.appointment import AppointmentApi
 from application.api.treatment import TreatmentAdd, DoctorPatientHistory, PatientTreatmentHistory, AdminTreatmentHistory, ExportDataAPI
@@ -56,6 +56,7 @@ api.add_resource(LoginApi, '/api/login', '/api/account/<string:account_type>/<in
 api.add_resource(RegisterApi, '/api/register')
 api.add_resource(DoctorApi, '/api/doctor', '/api/doctor/<int:doctor_id>')
 api.add_resource(PatientApi, '/api/patient', '/api/patient/<int:patient_id>')
+api.add_resource(PatientProfileUpdateAPI, '/api/patient/profile-update' ,)
 api.add_resource(DepartmentApi, '/api/department', '/api/department/<int:department_id>')
 api.add_resource(AppointmentApi, '/api/appointment', '/api/appointment/<int:appointment_id>')
 api.add_resource(TreatmentAdd, '/api/treatment/<int:appointment_id>',)

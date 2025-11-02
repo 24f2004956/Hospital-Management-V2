@@ -79,3 +79,44 @@ class PatientApi(Resource):
         db.session.delete(patient)
         db.session.commit()
         return {'message' : 'Patient deleted successfully'}, 200  
+    
+class PatientProfileUpdateAPI(Resource):
+        # update own profile (for patient dashboard)
+    @jwt_required()
+    def put(self):
+        current_user = get_jwt()
+        
+        # Allow only patient
+        if current_user.get('role') != 'patient':
+            return {"message": "Access denied!"}, 403
+        
+        user_id = int(current_user.get('sub'))
+        data = request.get_json()
+
+        patient = User.query.filter_by(id=user_id, role="patient").first()
+        if not patient:
+            return {"message": "Patient not found"}, 404
+
+        # Validate Name
+        if "name" in data:
+            if len(data["name"].strip()) < 3 or len(data["name"].strip()) > 50:
+                return {"message": "Name should be 3-50 chars long"}, 400
+            patient.name = data["name"].strip()
+
+        # Validate Email
+        if "email" in data:
+            if "@" not in data["email"] or len(data["email"]) > 60:
+                return {"message": "Invalid email format"}, 400
+            patient.email = data["email"].strip()
+
+        # Update optional fields
+        patient.age = data.get("age", patient.age)
+        patient.gender = data.get("gender", patient.gender)
+        patient.address = data.get("address", patient.address)
+        patient.contact = data.get("contact", patient.contact)
+        patient.profile = data.get("profile", patient.profile)
+
+        db.session.commit()
+        return {"message": "Profile updated successfully"}, 200
+
+
