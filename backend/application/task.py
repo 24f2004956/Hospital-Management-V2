@@ -47,19 +47,19 @@ def send_mail(email, subject, email_content, attachment=None):
     
 @celery.on_after_configure.connect
 def setup_periodic_task(sender, **kwargs):
-    sender.add_periodic_task(10.0, monthly_report.s(), name='monthly report sent at 10sec')
-    sender.add_periodic_task(5.0, daily_reminder.s(), name='daily_reminder sent successfully')
+    # sender.add_periodic_task(10.0, monthly_report.s(), name='monthly report sent at 10sec')
+    # sender.add_periodic_task(5.0, daily_reminder.s(), name='daily_reminder sent successfully')
 
     sender.add_periodic_task(
         crontab(hour=9, minute=0),
         daily_reminder.s(),
-        name = 'daily_remainder at 6:30 p.m'
+        name = 'daily_remainder at 9:00 a.m'
     )
 
     sender.add_periodic_task(
         crontab(day_of_month='1', month_of_year='*'),
         monthly_report.s(),
-        name = 'daily_remainder at 6:30 p.m'
+        name = 'monthly_report at 1st of every month'
     )
 
 
