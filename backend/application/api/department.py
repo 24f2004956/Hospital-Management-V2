@@ -7,15 +7,18 @@ from ..api1 import cache
 class DepartmentApi(Resource):
     #read
     @jwt_required()
-    #@cache.cached(timeout=300)
-    def get(self):
-        departments = Department.query.all()
-        print(departments)
+    def get(self, department_id=None):
 
-        department_json = []
-        for department in departments:
-            department_json.append(department.convert_to_json())
-        return department_json, 200    
+        # If department_id is provided → fetch single department
+        if department_id:
+            department = Department.query.get(department_id)
+            if not department:
+                return {"message": "Department not found"}, 404
+            return department.convert_to_json(), 200
+
+        # Else → return all departments
+        departments = Department.query.all()
+        return [dept.convert_to_json() for dept in departments], 200
     
     #create
     @jwt_required()

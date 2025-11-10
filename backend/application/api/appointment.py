@@ -135,7 +135,7 @@ class AppointmentApi(Resource):
         role = current_user.get('role')
 
         if role == 'patient':
-            appointments = Appointment.query.filter_by(patient_id=current_user.get('sub')).all()
+            appointments = Appointment.query.filter(Appointment.patient_id == int(current_user.get('sub')),Appointment.date >= date.today(),Appointment.status == 'Booked').all()
         elif role == 'doctor':
             appointments = Appointment.query.filter(Appointment.doctor_id == int(current_user.get('sub')),Appointment.date >= date.today(),Appointment.status == 'Booked').all()
         else:  # admin

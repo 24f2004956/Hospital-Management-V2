@@ -95,6 +95,13 @@ class Department(db.Model):
         return {
             "id": self.id,
             "name": self.name,
+            "doctors": [
+            {
+                "id": doctor.id,
+                "name": doctor.name,
+                "experience": doctor.experience_years
+            } for doctor in self.doctor
+        ],
             "description": self.description,
         }
 

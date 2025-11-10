@@ -3,7 +3,7 @@ from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from application.models import db, User
 from application.api.auth import LoginApi, RegisterApi
-from application.api.doctor import DoctorApi
+from application.api.doctor import DoctorApi, DoctorDetailApi, DoctorProfileUpdateAPI
 from application.api.patient import PatientApi, PatientProfileUpdateAPI
 from application.api.department import DepartmentApi
 from application.api.appointment import AppointmentApi
@@ -55,6 +55,8 @@ api.add_resource(WelcomeApi, '/api/welcome')
 api.add_resource(LoginApi, '/api/login', '/api/account/<string:account_type>/<int:account_id>')
 api.add_resource(RegisterApi, '/api/register')
 api.add_resource(DoctorApi, '/api/doctor', '/api/doctor/<int:doctor_id>')
+api.add_resource(DoctorProfileUpdateAPI, '/api/doctor/me',  '/api/doctor/profile-update')
+api.add_resource(DoctorDetailApi,   '/api/doctor-details/<int:doctor_id>')
 api.add_resource(PatientApi, '/api/patient', '/api/patient/<int:patient_id>')
 api.add_resource(PatientProfileUpdateAPI, '/api/patient/profile-update' ,)
 api.add_resource(DepartmentApi, '/api/department', '/api/department/<int:department_id>')

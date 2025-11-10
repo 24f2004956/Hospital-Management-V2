@@ -104,3 +104,54 @@ class DoctorApi(Resource):
         db.session.delete(doctor)
         db.session.commit()
         return {'message' : 'Doctor deleted successfully'}, 200  
+
+class DoctorDetailApi(Resource):
+    @jwt_required()
+    def get(self, doctor_id):
+        doctor = Doctor.query.get(doctor_id)
+        if not doctor:
+            return {"message": "Doctor not found"}, 404
+        return doctor.convert_to_json(), 200
+    
+class DoctorProfileUpdateAPI(Resource):
+    @jwt_required()
+    def get(self):
+        # Get current doctor info
+        current_user = get_jwt()
+        doctor = Doctor.query.get(current_user.get("sub"))
+        if not doctor:
+            return {"message": "Doctor not found"}, 404
+        return doctor.convert_to_json(), 200
+
+    @jwt_required()
+    def put(self):
+        current_user = get_jwt()
+        if current_user.get("role") != "doctor":
+            return {"message": "Access denied!"}, 403
+
+        doctor = Doctor.query.get(current_user.get("sub"))
+        if not doctor:
+            return {"message": "Doctor not found"}, 404
+
+        data = request.get_json()
+
+        if "name" in data:
+            if len(data["name"].strip()) < 3 or len(data["name"].strip()) > 50:
+                return {"message": "Name should be 3-50 chars long"}, 400
+            doctor.name = data["name"].strip()
+
+        if "email" in data:
+            if "@" not in data["email"] or len(data["email"]) > 60:
+                return {"message": "Invalid email format"}, 400
+            doctor.email = data["email"].strip()
+
+        doctor.experience_years = data.get("experience_years", doctor.experience_years)
+        doctor.department_id=data.get('department_id')
+        doctor.contact = data.get("contact", doctor.contact)
+        doctor.profile = data.get("profile", doctor.profile)
+        doctor.qualification = data.get("qualification", doctor.qualification)
+        doctor.about = data.get("about", doctor.about)
+
+        db.session.commit()
+        return {"message": "Profile updated successfully"}, 200
+
