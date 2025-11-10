@@ -23,146 +23,147 @@
     </div>
   </nav>
 
+  <div v-if="!noResults" class="text-center text-muted mt-5">
 
-  <div v-if="filteredDepartments.length" class="container mt-5">
-    <h3 class="mb-4 text-center" id="department-section">Department List</h3>
 
-    <table class="table table-bordered table-striped text-center shadow-sm">
-      <thead class="table-dark">
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(department, index) in filteredDepartments" :key="department.id">
-          <td>{{ index + 1 }}</td>
-          <td>{{ department.name }}</td>
-          <td>{{ department.description }}</td>
-          <td>
-            <button class="btn btn-warning btn-sm" @click="openEditDepartment(department)">Edit</button>
-            <button class="btn btn-danger btn-sm" @click="deleteDepartment(department.id)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div v-if="filteredDepartments.length" class="container mt-5">
+      <h3 class="mb-4 text-center" id="department-section">Department List</h3>
+
+      <table class="table table-bordered table-striped text-center shadow-sm">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(department, index) in filteredDepartments" :key="department.id">
+            <td>{{ index + 1 }}</td>
+            <td>{{ department.name }}</td>
+            <td>{{ department.description }}</td>
+            <td>
+              <button class="btn btn-warning btn-sm" @click="openEditDepartment(department)">Edit</button>
+              <button class="btn btn-danger btn-sm" @click="deleteDepartment(department.id)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-else-if="!isSearching" class="text-center text-muted mt-5">
+      <h5>No departments available at the moment.</h5>
+    </div>
+
+    <div v-if="filteredDoctors.length" class="container mt-5">
+      <h3 class="mb-4 text-center" id="doctor-section">Doctor List</h3>
+
+      <table class="table table-bordered table-striped text-center shadow-sm">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Department</th>
+            <th>Experience</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(doctor, index) in filteredDoctors" :key="doctor.id">
+            <td>{{ index + 1 }}</td>
+            <td>{{ doctor.name }}</td>
+            <td>{{ doctor.email }}</td>
+            <td>{{ doctor.contact || 'N/A' }}</td>
+            <td>{{ doctor.department_name }}</td>
+            <td>{{ doctor.experience_years || 'N/A' }}</td>
+            <td>
+              <button class="btn btn-warning btn-sm" @click="openEditDoctor(doctor)">Edit</button>
+              <button class="btn btn-danger btn-sm" @click="deleteDoctor(doctor.id)">Delete</button>
+              <button class="btn btn-dark btn-sm" @click="toggleBlacklistDoctor(doctor)">
+                {{ doctor.black_list_status === 'active' ? 'Unblacklist' : 'Blacklist' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-else-if="!isSearching" class="text-center text-muted mt-5">
+      <h5>No doctors available at the moment.</h5>
+    </div>
+
+    <div v-if="filteredPatients.length" class="container mt-5">
+      <h3 class="mb-4 text-center" id="patient-section">Patient List</h3>
+
+      <table class="table table-bordered table-striped text-center shadow-sm">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(patient, index) in filteredPatients" :key="patient.id">
+            <td>{{ index + 1 }}</td>
+            <td>{{ patient.name }}</td>
+            <td>{{ patient.email }}</td>
+            <td>{{ patient.age || 'N/A' }}</td>
+            <td>{{ patient.gender || 'N/A' }}</td>
+            <td>
+              <button class="btn btn-warning btn-sm" @click="openEditPatient(patient)">Edit</button>
+              <button class="btn btn-danger btn-sm" @click="deletePatient(patient.id)">Delete</button>
+              <button class="btn btn-dark btn-sm" @click="toggleBlacklistPatient(patient)">
+                {{ patient.black_list_status === 'active' ? 'Unblacklist' : 'Blacklist' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-else-if="!isSearching" class="text-center text-muted mt-5">
+      <h5>No patients available at the moment.</h5>
+    </div>
+
+    <div v-if="filteredAppointments.length" class="container mt-5">
+      <h3 class="mb-4 text-center">Upcoming Appointments</h3>
+
+      <table class="table table-bordered table-striped text-center shadow-sm">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Patient</th>
+            <th>Doctor</th>
+            <th>Department</th>
+            <th>History</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(appointment, index) in filteredAppointments" :key="appointment.id">
+            <td>{{ index + 1 }}</td>
+            <td>{{ appointment.patient_name }}</td>
+            <td>{{ appointment.doctor_name }}</td>
+            <td>{{ appointment.department_name }}</td>
+            <td>
+              <button class="btn btn-info btn-sm" @click="openPatientHistory(appointment)">View</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-else-if="!isSearching" class="text-center text-muted mt-5">
+      <h5>No upcoming appointments scheduled.</h5>
+    </div>
   </div>
+
   <div v-else class="text-center text-muted mt-5">
-    <h5>No departments available at the moment.</h5>
+    <h5>No matching records found</h5>
   </div>
 
-  <div v-if="filteredDoctors.length" class="container mt-5">
-    <h3 class="mb-4 text-center" id="doctor-section">Doctor List</h3>
-
-    <table class="table table-bordered table-striped text-center shadow-sm">
-      <thead class="table-dark">
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Contact</th>
-          <th>Department</th>
-          <th>Experience</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(doctor, index) in filteredDoctors" :key="doctor.id">
-          <td>{{ index + 1 }}</td>
-          <td>{{ doctor.name }}</td>
-          <td>{{ doctor.email }}</td>
-          <td>{{ doctor.contact || 'N/A' }}</td>
-          <td>{{ doctor.department_name }}</td>
-          <td>{{ doctor.experience_years || 'N/A' }}</td>
-          <td>
-            <button class="btn btn-warning btn-sm" @click="openEditDoctor(doctor)">Edit</button>
-            <button class="btn btn-danger btn-sm" @click="deleteDoctor(doctor.id)">Delete</button>
-            <button class="btn btn-dark btn-sm" @click="toggleBlacklistDoctor(doctor)">
-              {{ doctor.black_list_status === 'active' ? 'Unblacklist' : 'Blacklist' }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div v-else class="text-center text-muted mt-5">
-    <h5>No doctors available at the moment.</h5>
-  </div>
-
-  <div v-if="filteredPatients.length" class="container mt-5">
-    <h3 class="mb-4 text-center" id="patient-section">Patient List</h3>
-
-    <table class="table table-bordered table-striped text-center shadow-sm">
-      <thead class="table-dark">
-        <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Age</th>
-          <th>Gender</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(patient, index) in filteredPatients" :key="patient.id">
-          <td>{{ index + 1 }}</td>
-          <td>{{ patient.name }}</td>
-          <td>{{ patient.email }}</td>
-          <td>{{ patient.age || 'N/A' }}</td>
-          <td>{{ patient.gender || 'N/A' }}</td>
-          <td>
-            <button class="btn btn-warning btn-sm" @click="openEditPatient(patient)">Edit</button>
-            <button class="btn btn-danger btn-sm" @click="deletePatient(patient.id)">Delete</button>
-            <button class="btn btn-dark btn-sm" @click="toggleBlacklistPatient(patient)">
-              {{ patient.black_list_status === 'active' ? 'Unblacklist' : 'Blacklist' }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div v-else class="text-center text-muted mt-5">
-    <h5>No patients available at the moment.</h5>
-  </div>
-
-  <div v-if="filteredAppointments.length" class="container mt-5">
-    <h3 class="mb-4 text-center">Upcoming Appointments</h3>
-
-    <table class="table table-bordered table-striped text-center shadow-sm">
-      <thead class="table-dark">
-        <tr>
-          <th>#</th>
-          <th>Patient</th>
-          <th>Doctor</th>
-          <th>Department</th>
-          <th>History</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(appointment, index) in filteredAppointments" :key="appointment.id">
-          <td>{{ index + 1 }}</td>
-          <td>{{ appointment.patient_name }}</td>
-          <td>{{ appointment.doctor_name }}</td>
-          <td>{{ appointment.department_name }}</td>
-          <td>
-            <button class="btn btn-info btn-sm" @click="openPatientHistory(appointment)">View</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div v-else class="text-center text-muted mt-5">
-    <h5>No upcoming appointments scheduled.</h5>
-  </div>
-
-  <div class="text-center text-muted mt-5" v-if="!filteredDoctors.length &&
-    !filteredPatients.length &&
-    !filteredDepartments.length &&
-    !filteredAppointments.length">
-    <h5>No matching records found </h5>
-  </div>
 
   <EditDoctor v-if="showEditDoctorModal" :doctor="selectedDoctor" :departments="departments"
     @close="showEditDoctorModal = false" @updated="showEditDoctorModal = false; fetchDoctors();" />
@@ -242,7 +243,8 @@ export default {
         if (!response.ok) {
           this.errorMessage = result.message;
         } else {
-          this.patients = result;
+          this.patients = Array.isArray(result) ? result : [result];
+
         }
       } catch (error) {
         this.errorMessage = 'Unable to connect to the server. Please try again later.';
@@ -446,8 +448,11 @@ export default {
 
     },
     activePatients() {
-      return this.patients.filter(p => p.black_list_status === 'deactive');
-    },
+      return Array.isArray(this.patients)
+        ? this.patients.filter(p => p.black_list_status === 'deactive')
+        : [];
+    }
+    ,
     filteredDoctors() {
       const key = this.globalSearch.toLowerCase();
       return this.activeDoctors.filter(d =>
@@ -488,7 +493,20 @@ export default {
         a.department_name.toLowerCase().includes(s) ||
         a.reason.toLowerCase().includes(s)
       );
+    },
+    noResults() {
+      return (
+        this.globalSearch.trim() &&
+        !this.filteredDoctors.length &&
+        !this.filteredPatients.length &&
+        !this.filteredDepartments.length &&
+        !this.filteredAppointments.length
+      );
+    },
+    isSearching() {
+      return this.globalSearch.trim().length > 0;
     }
+
   }
 }
 </script>

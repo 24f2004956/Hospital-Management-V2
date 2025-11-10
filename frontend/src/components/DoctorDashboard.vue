@@ -9,6 +9,8 @@
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item"><router-link to="/" class="nav-link">Home</router-link></li>
+                <li class="nav-item"><router-link to="/doctor-profile-update" class="nav-link">Edit
+                        Profile</router-link></li>
                 <li class="nav-item"><router-link to="/doctor-availability" class="nav-link">Provide
                         Availability</router-link></li>
                 <li class="nav-item"><button class="nav-link text-danger" @click="logout">Logout</button></li>
@@ -20,7 +22,7 @@
         <div>
             <h3 class="mb-4 text-center">Upcoming Appointments</h3>
 
-            <table class="table table-bordered table-striped text-center shadow-sm", v-if="appointments.length">
+            <table class="table table-bordered table-striped text-center shadow-sm" v-if="appointments.length">
                 <thead class="table-dark">
                     <tr>
                         <th>#</th>
@@ -51,7 +53,7 @@
 
         <div>
             <h3 class="mb-4 text-center">Assigned Patients</h3>
-            <table class="table table-bordered text-center", v-if="assignedPatients.length">
+            <table class="table table-bordered text-center" v-if="assignedPatients.length">
                 <thead class="table-dark">
                     <tr>
                         <th>#</th>

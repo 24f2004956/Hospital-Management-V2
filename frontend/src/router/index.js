@@ -13,6 +13,8 @@ import DoctorAvailability from '@/components/DoctorAvailability.vue'
 import PatientDashboard from '@/components/PatientDashboard.vue'
 import PatienProfileUpdate from '@/components/PatienProfileUpdate.vue'
 import HistoryExport from '@/components/HistoryExport.vue'
+import ViewDepartment from '@/components/ViewDepartment.vue'
+import DoctorProfileUpdate from '@/components/DoctorProfileUpdate.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -86,7 +88,17 @@ const router = createRouter({
       path: '/history-export',
       name: 'history-export',
       component: HistoryExport,
-    }
+    },
+    {
+      path: '/department-details/:id',
+      name: 'department-details',
+      component: ViewDepartment,
+    },
+    {
+      path: '/doctor-profile-update',
+      name: 'doctor-profile-update',
+      component: DoctorProfileUpdate,
+    },
 
   ],
 })

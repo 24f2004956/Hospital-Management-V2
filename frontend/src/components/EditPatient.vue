@@ -34,6 +34,29 @@
             <input type="number" v-model="localPatient.age" class="form-control">
           </div>
 
+          <div class="mb-3">
+            <label class="form-label">Profile</label>
+            <input v-model="localPatient.profile" class="form-control">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Address</label>
+            <input v-model="localPatient.address" class="form-control">
+          </div>
+
+          
+          <div class="mb-3">
+            <label class="form-label">Contact</label>
+            <input v-model="localPatient.contact" class="form-control">
+          </div>
+
+          
+
+
+          
+          
+
+
         </div>
 
         <div class="modal-footer">

@@ -39,6 +39,21 @@
             <input type="number" v-model="localDoctor.experience_years" class="form-control">
           </div>
 
+          <div class="mb-3">
+            <label class="form-label">about</label>
+            <input v-model="localDoctor.about" class="form-control">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Qualification</label>
+            <input v-model="localDoctor.qualification" class="form-control">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">profile</label>
+            <input v-model="localDoctor.profile" class="form-control">
+          </div>
+
         </div>
 
         <div class="modal-footer">
@@ -56,7 +71,7 @@ export default {
   props: ["doctor", "departments"],
   data() {
     return {
-      localDoctor: { ...this.doctor } // ✅ Avoid direct mutation
+      localDoctor: { ...this.doctor } 
     };
   },
   methods: {
