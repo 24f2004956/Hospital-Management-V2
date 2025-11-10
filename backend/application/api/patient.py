@@ -7,6 +7,7 @@ from ..api1 import cache
 class PatientApi(Resource):
     #read
     @jwt_required()
+    @cache.cached(timeout=60)
     def get(self):
         current_user = get_jwt()
         role = current_user.get('role')

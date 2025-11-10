@@ -127,7 +127,7 @@ def monthly_report():
             print(f"Monthly report sent to Dr. {doctor.name}")   
 
 @celery.task
-def data_export(treatment_details, email): #treatmeant_details should be a list of dictonaries
+def data_export(treatment_details, email): #treatmeant_details => list of dictonaries => [{..},{..},{..}...]
     with open('data_export.csv', 'w', newline='') as  csvfile:
         fieldnames = ["name","doctor_name","diagnosis","prescription","notes","upcoming_visit","visit_type","test_done","medicines"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)

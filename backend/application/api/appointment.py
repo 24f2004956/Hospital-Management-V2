@@ -129,7 +129,7 @@ class AppointmentApi(Resource):
         }, 200
     
     @jwt_required()
-    #@cache.cached(timeout=300)
+    #@cache.cached(timeout=60)
     def get(self):
         current_user = get_jwt()
         role = current_user.get('role')
