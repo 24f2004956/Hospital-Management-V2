@@ -6,10 +6,12 @@ from application.api.auth import LoginApi, RegisterApi
 from application.api.doctor import DoctorApi, DoctorDetailApi, DoctorProfileUpdateAPI
 from application.api.patient import PatientApi, PatientProfileUpdateAPI
 from application.api.department import DepartmentApi
-from application.api.appointment import AppointmentApi
+from application.api.appointment import AppointmentApi, AppointmentPaymentAPI
 from application.api.treatment import TreatmentAdd, DoctorPatientHistory, PatientTreatmentHistory, AdminTreatmentHistory, ExportDataAPI
 from application.api.availablility import  DoctorAvailabilityAPI, DoctorAvailabilityWeekAPI
 from application.worker import celery
+from application.api.chart import AppointmentReportApi, DepartmentDemandApi
+from application.api.pdf import PDFReportAPI
 from application.task import *
 #from flask_cors import CORS
 
@@ -68,6 +70,11 @@ api.add_resource(AdminTreatmentHistory, '/api/treatment/admin',)
 api.add_resource(DoctorAvailabilityAPI, '/api/availability',)
 api.add_resource(DoctorAvailabilityWeekAPI, '/api/availability-week')
 api.add_resource(ExportDataAPI, '/api/treatment/export',)
+api.add_resource(AppointmentReportApi, '/api/report/appointments-trend',)
+api.add_resource(DepartmentDemandApi, '/api/report/department-demand',)
+api.add_resource(PDFReportAPI, '/api/reports/monthly')
+api.add_resource(AppointmentPaymentAPI, '/api/appointments/<int:appointment_id>/pay')
+
 
 
 @app.route('/test_cache')
@@ -87,7 +94,7 @@ def add_admin():
         print('admin already exist in database')
         
 if __name__=='__main__':
-    #db.drop_all() toggle b/w drop_all() and add admin
+    #db.drop_all() #toggle b/w drop_all() and add admin
     add_admin()
     db.create_all()
     app.run(debug=True)

@@ -8,6 +8,7 @@ from ..api1 import cache
 class LoginApi(Resource):
     def post(self):
         data=request.get_json()
+        login_as = data.get("login_as")
 
         if not (data.get('email') and data.get('password')):
             return {'message' : 'Both email & password fields are required.'}, 400
@@ -25,8 +26,13 @@ class LoginApi(Resource):
         
         if (account.black_list_status == 'active'):
             return {'message': 'Your account has been blacklisted'}, 400
-
         
+        if login_as and account.role != login_as:
+            return {
+                "message": f"Unauthorized: Please login via {account.role} portal."
+            }, 403
+
+
         #token = create_access_token({'role' : user.role, 'user_id' : user.id})    # used in older version of jwt if used get the error " subject must be a string"
         token = create_access_token(
                                     identity=str(account.id),              # string for JWT "sub"

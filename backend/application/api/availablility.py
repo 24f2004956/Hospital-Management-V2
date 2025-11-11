@@ -22,6 +22,7 @@ class DoctorAvailabilityAPI(Resource):
         data = request.get_json()
         slot_id = data.get('slot_id')
         date_str = data.get('date')
+        fee = data.get('fee', 0)  # ✅ NEW FIELD
 
         if slot_id not in SLOTS:
             return {'message': 'Invalid slot ID'}, 400
@@ -35,7 +36,7 @@ class DoctorAvailabilityAPI(Resource):
         if not (today <= avail_date <= today + timedelta(days=7)):
             return {'message': 'Date must be within next 7 days'}, 400
 
-        # Prevent Duplicate Slot
+        # ✅ Prevent Duplicate Slot
         existing = DoctorAvailability.query.filter_by(
             doctor_id=current_user.get('sub'),
             date=avail_date,
@@ -50,11 +51,13 @@ class DoctorAvailabilityAPI(Resource):
             doctor_id=int(current_user.get('sub')),
             date=avail_date,
             start_time=start_time,
-            end_time=end_time
+            end_time=end_time,
+            fee=fee     # ✅ SAVE FEE
         )
         db.session.add(new_slot)
         db.session.commit()
         return {'message': 'Availability added successfully'}, 201
+
 
 
     # Get doctor availability (patients or doctors can view)
@@ -105,6 +108,7 @@ class DoctorAvailabilityWeekAPI(Resource):
         data = request.get_json()
         date_str = data.get('date')
         slot_id = data.get('slot_id')
+        fee = data.get('fee', 0)  # ✅ NEW FIELD
 
         if slot_id not in SLOTS:
             return {'message': 'Invalid slot ID'}, 400
@@ -114,25 +118,24 @@ class DoctorAvailabilityWeekAPI(Resource):
         start_time = datetime.strptime(start_str, "%H:%M").time()
         end_time = datetime.strptime(end_str, "%H:%M").time()
 
-        # Prevent duplicate slot
-        exists = DoctorAvailability.query.filter_by(
+        existing = DoctorAvailability.query.filter_by(
             doctor_id=int(current_user.get('sub')),
             date=avail_date,
             start_time=start_time,
             end_time=end_time
         ).first()
 
-        if exists:
-            db.session.delete(exists)   # ✅ Toggle behavior (remove if exists)
+        if existing:
+            db.session.delete(existing)
             db.session.commit()
             return {'message': 'Slot removed'}, 200
 
-        # Otherwise add slot
         new_slot = DoctorAvailability(
             doctor_id=int(current_user.get('sub')),
             date=avail_date,
             start_time=start_time,
-            end_time=end_time
+            end_time=end_time,
+            fee=fee  # ✅ SAVE FEE
         )
         db.session.add(new_slot)
         db.session.commit()

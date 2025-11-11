@@ -74,6 +74,7 @@ class DoctorAvailability(db.Model):
     start_time = Column(Time, nullable=False,)
     end_time = Column(Time, nullable=False)
     status = Column(String(20), default='available')  # available  booked  unavailable
+    fee = Column(Integer, nullable=False, default=0)  # << NEW FIELD
 
     def convert_to_json(self):
         return {
@@ -82,8 +83,8 @@ class DoctorAvailability(db.Model):
             "date": str(self.date),
             "start_time": str(self.start_time),
             "end_time": str(self.end_time),
-            "status": self.status
-        }    
+            "status": self.status,
+            "fee":self.fee }
 
 class Department(db.Model):
     id = Column(Integer, primary_key=True)
@@ -113,6 +114,12 @@ class Appointment(db.Model):
     time = Column(Time, nullable=True)
     status = Column(String(20),nullable=False,default='Booked') # Booked ,Completed, Cancelled
     reason = Column(String(150))
+
+    payment_status = Column(String(20), default="Pending")  # << NEW FIELD
+    amount_paid = Column(Integer, default=0)  # << NEW FIELD
+
+
+
     treatment = db.relationship('Treatment', backref='appointment',cascade="all, delete-orphan")
 
     def convert_to_json(self):
@@ -126,7 +133,9 @@ class Appointment(db.Model):
             "date": self.date.strftime("%Y-%m-%d"),   #strftime 
             "time": self.time.strftime("%I:%M %p"),
             "status": self.status,
-            "reason": self.reason
+            "reason": self.reason,
+            "payment_status": self.payment_status,     # NEW
+            "amount_paid": self.amount_paid            # NEW
         }
 
 class Treatment(db.Model):

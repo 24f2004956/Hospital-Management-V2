@@ -45,7 +45,9 @@ class AppointmentApi(Resource):
             date = appt_date,
             time = appt_time,
             status='Booked',
-            reason=data.get('reason') )
+            reason=data.get('reason'),
+            payment_status="pending" if slot.fee > 0 else "paid",
+            amount_paid=slot.fee, )
         
         db.session.add(new_appointment)
         slot.status = 'booked'
@@ -145,6 +147,45 @@ class AppointmentApi(Resource):
             appointment_json.append(appointment.convert_to_json())
         return appointment_json, 200 
 
-   
 
+class AppointmentPaymentAPI(Resource):
+    @jwt_required()
+    def post(self, appointment_id):
+        current_user = get_jwt()
 
+        # Only patients can mark payment
+        if current_user.get('role') != 'patient':
+            return {'message': 'Only patients can update payment'}, 403
+
+        appointment = Appointment.query.filter_by(
+            id=appointment_id,
+            patient_id=current_user.get('sub')  # Patient must own the appointment
+        ).first()
+
+        if not appointment:
+            return {'message': 'Appointment not found'}, 404
+        
+        if appointment.payment_status == "paid":
+            return {'message': 'Payment already completed'}, 400
+        
+        # Get fee from corresponding slot
+        slot = DoctorAvailability.query.filter(
+            DoctorAvailability.doctor_id == appointment.doctor_id,
+            DoctorAvailability.date == appointment.date,
+            DoctorAvailability.start_time <= appointment.time,
+            DoctorAvailability.end_time >= appointment.time
+        ).first()
+
+        if not slot:
+            return {'message': 'Slot not found for this appointment'}, 400
+
+        # Update payment fields
+        appointment.payment_status = "paid"
+        appointment.amount_paid = slot.fee  # or slot.price if your model uses price
+
+        db.session.commit()
+
+        return {
+            'message': 'Payment marked as completed successfully',
+            'appointment': appointment.convert_to_json()
+        }, 200
