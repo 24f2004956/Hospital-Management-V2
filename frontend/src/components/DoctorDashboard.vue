@@ -8,7 +8,7 @@
 
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><router-link to="/" class="nav-link">Home</router-link></li>
+                <li class="nav-item">Hello {{ username }} !</li>
                 <li class="nav-item"><router-link to="/doctor-profile-update" class="nav-link">Edit
                         Profile</router-link></li>
                 <li class="nav-item"><router-link to="/doctor-availability" class="nav-link">Provide
@@ -17,6 +17,8 @@
             </ul>
         </div>
     </nav>
+    <button @click="downloadPDF" class="btn btn-primary">Export Report as PDF</button>
+
 
     <div>
         <div>
@@ -89,6 +91,7 @@ export default {
     name: 'DoctorDashboard',
     data() {
         return {
+            username: localStorage.getItem("username") || "",
             appointments: [],
             showHistoryModal: false,
             selectedPatient: null,
@@ -103,6 +106,21 @@ export default {
         UpdatePatientHistory, PatientHistory
     },
     methods: {
+        async downloadPDF() {
+    const month = "2025-01"; // You can use a date picker to make dynamic
+
+    const response = await fetch(`/api/reports/monthly?month=${month}`, {
+      method: 'GET',
+    });
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Monthly_Report_${month}.pdf`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  },
         logout() {
             localStorage.removeItem('doctorToken');
             this.$router.push('/');

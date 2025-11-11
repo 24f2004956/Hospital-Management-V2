@@ -7,6 +7,8 @@
         <div v-for="day in week" :key="day.date" class="day-row">
             <h3 class="day-title">{{ day.date }}</h3>
 
+            <input type="number" v-model="slotFee" placeholder="Enter Fee (₹)" class="fee-input" />
+
             <div class="slots">
                 <div v-for="slot in slots" :key="slot.id" class="slot-button"
                     :class="{ active: isSelected(day.date, slot.id) }" @click="toggleSlot(day.date, slot.id)">
@@ -38,7 +40,8 @@ export default {
                 { id: 4, label: "5:00 - 7:00 PM" },
                 { id: 5, label: "8:30 - 9:30 PM" },
             ],
-            selectedSlots: []
+            selectedSlots: [],
+            slotFee: 0 
         }
     },
 
@@ -84,7 +87,7 @@ export default {
                     "Authorization": "Bearer " + localStorage.getItem("doctorToken"),
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ date, slot_id: slotId })
+                body: JSON.stringify({ date, slot_id: slotId, fee: this.slotFee })
             });
 
             this.fetchExisting();
@@ -144,4 +147,12 @@ export default {
     border-color: #004bcc;
     color: white;
 }
+.fee-input {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    width: 150px;
+}
+
 </style>

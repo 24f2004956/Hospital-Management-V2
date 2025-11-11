@@ -15,8 +15,10 @@
 
             <div class="d-flex flex-wrap gap-2">
               <button v-for="slot in day.slots" :key="slot.id" class="btn btn-outline-primary btn-sm"
-                @click="book(day.date, slot.start_time.slice(0, 5))">
+                @click="goToPayment(day.date, slot)">
                 {{ slot.start_time.slice(0, 5) }} - {{ slot.end_time.slice(0, 5) }}
+                <span v-if="slot.fee && slot.fee > 0" > ₹{{ slot.fee }}</span>
+                <span v-else class="text-muted">Free</span>
               </button>
 
             </div>
@@ -43,39 +45,39 @@ export default {
   },
   computed: {
     groupedAvailability() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-  const nextWeek = new Date();
-  nextWeek.setDate(today.getDate() + 7);
-  nextWeek.setHours(0, 0, 0, 0);
+      const nextWeek = new Date();
+      nextWeek.setDate(today.getDate() + 7);
+      nextWeek.setHours(0, 0, 0, 0);
 
-  const grouped = {};
+      const grouped = {};
 
-  this.availability.forEach(slot => {
-    const slotDate = new Date(slot.date + "T00:00:00");
+      this.availability.forEach(slot => {
+        const slotDate = new Date(slot.date + "T00:00:00");
 
-    if (slotDate >= today && slotDate <= nextWeek) {
-      if (!grouped[slot.date]) {
-        grouped[slot.date] = { date: slot.date, slots: [] };
-      }
-      grouped[slot.date].slots.push(slot);
+        if (slotDate >= today && slotDate <= nextWeek) {
+          if (!grouped[slot.date]) {
+            grouped[slot.date] = { date: slot.date, slots: [] };
+          }
+          grouped[slot.date].slots.push(slot);
+        }
+      });
+
+      // ✅ Convert to array
+      const groupedArray = Object.values(grouped);
+
+      // ✅ Sort dates in ascending order
+      groupedArray.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+      // ✅ Sort slots inside each day by start time
+      groupedArray.forEach(day => {
+        day.slots.sort((a, b) => a.start_time.localeCompare(b.start_time));
+      });
+
+      return groupedArray;
     }
-  });
-
-  // ✅ Convert to array
-  const groupedArray = Object.values(grouped);
-
-  // ✅ Sort dates in ascending order
-  groupedArray.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-  // ✅ Sort slots inside each day by start time
-  groupedArray.forEach(day => {
-    day.slots.sort((a, b) => a.start_time.localeCompare(b.start_time));
-  });
-
-  return groupedArray;
-}
 
 
 
@@ -88,6 +90,18 @@ export default {
     this.availability = await res.json();
   },
   methods: {
+    goToPayment(date, slot) {
+      this.$router.push({
+        name: "PaymentScreen",
+        query: {
+          doctor_id: this.doctor.id,
+          date,
+          time: slot.start_time.slice(0, 5),
+          fee: slot.fee
+        }
+      });
+    },
+
     async book(date, time) {
       const token = localStorage.getItem("patientToken");
 

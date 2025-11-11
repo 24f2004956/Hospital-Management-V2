@@ -8,7 +8,7 @@
 
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><router-link to="/" class="nav-link">Home</router-link></li>
+                <li class="nav-item">Hello {{ username }} !</li>
                 <li class="nav-item"><router-link to="/patient-profile-update" class="nav-link">Edit
                         Profile</router-link></li>
                 <li class="nav-item"><router-link to="/history-export" class="nav-link">History</router-link></li>
@@ -81,6 +81,7 @@ export default {
         return {
             departments: [],
             appointments: [],
+            username: localStorage.getItem("username") || "",
         };
     },
     methods: {

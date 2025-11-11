@@ -15,6 +15,7 @@ import PatienProfileUpdate from '@/components/PatienProfileUpdate.vue'
 import HistoryExport from '@/components/HistoryExport.vue'
 import ViewDepartment from '@/components/ViewDepartment.vue'
 import DoctorProfileUpdate from '@/components/DoctorProfileUpdate.vue'
+import PaymentScreen from '@/components/PaymentScreen.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -98,6 +99,11 @@ const router = createRouter({
       path: '/doctor-profile-update',
       name: 'doctor-profile-update',
       component: DoctorProfileUpdate,
+    },
+    {
+      path: '/payment-screen',
+      name: 'PaymentScreen',
+      component: PaymentScreen,
     },
 
   ],
