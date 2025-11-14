@@ -5,22 +5,22 @@ from ..models import db, Doctor, Department
 from ..api1 import cache
 
 class DepartmentApi(Resource):
-    #read
+
     @jwt_required()
     def get(self, department_id=None):
 
-        # If department_id is provided → fetch single department
+       
         if department_id:
             department = Department.query.get(department_id)
             if not department:
                 return {"message": "Department not found"}, 404
             return department.convert_to_json(), 200
 
-        # Else → return all departments
+       
         departments = Department.query.all()
         return [dept.convert_to_json() for dept in departments], 200
     
-    #create
+ 
     @jwt_required()
     def post(self):
         current_user=get_jwt()
@@ -36,7 +36,7 @@ class DepartmentApi(Resource):
         
         
         if len(data.get('description').strip()) > 150 or len(data.get('description').strip()) < 10 :
-            return {'message' : 'password should be in between 10-150 characters long'}
+            return {'message' : 'description should be in between 10-150 characters long'}
 
         department=Department.query.filter_by(name=data.get('name')).first()
         if department:
@@ -47,7 +47,7 @@ class DepartmentApi(Resource):
         db.session.commit()
         return {'message' : 'Department added successfully'}, 201     
 
-    # update 
+
     @jwt_required()
     def put(self, department_id):
         current_user=get_jwt()
@@ -68,12 +68,12 @@ class DepartmentApi(Resource):
         if  not department:
             return {'message' : 'Department not found.'}, 404
         
-        department.name=data.get('name').strip() if data.get('name').strip() else department.name # if only one fields needs to be edited
+        department.name=data.get('name').strip() if data.get('name').strip() else department.name 
         department.description=data.get('description').strip()
         db.session.commit()
         return {'message' : 'Department details updated successfully'}, 200    
      
-     #delete
+
     @jwt_required()
     def delete(self, department_id):
         current_user=get_jwt()

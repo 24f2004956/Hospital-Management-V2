@@ -2,7 +2,8 @@
   <!-- Modern Sidebar Navigation -->
   <div class="d-flex min-vh-100">
     <!-- Sidebar -->
-    <nav class="sidebar bg-dark text-white d-flex flex-column p-3" style="width: 260px; position: fixed; height: 100vh; overflow-y: auto;">
+    <nav class="sidebar bg-dark text-white d-flex flex-column p-3"
+      style="width: 260px; position: fixed; height: 100vh; overflow-y: auto;">
       <div class="mb-4">
         <h4 class="fw-bold text-white mb-0">
           <i class="bi bi-hospital"></i> Admin Portal
@@ -12,47 +13,32 @@
 
       <ul class="nav flex-column gap-2">
         <li class="nav-item">
-          <router-link to="/admin-dashboard" class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight">
+          <router-link to="/admin-dashboard"
+            class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight">
             <i class="bi bi-speedometer2 me-2"></i> Dashboard
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/create-department" class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight">
+          <router-link to="/create-department"
+            class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight">
             <i class="bi bi-building me-2"></i> Create Department
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/doctor-register" class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight">
+          <router-link to="/doctor-register"
+            class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight">
             <i class="bi bi-person-plus me-2"></i> Register Doctor
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/blacklisted" class="nav-link text-white rounded d-flex align-items-center py-2 px-3" 
-                       style="background: rgba(255,255,255,0.1);">
+          <router-link to="/blacklisted" class="nav-link text-white rounded d-flex align-items-center py-2 px-3"
+            style="background: rgba(255,255,255,0.1);">
             <i class="bi bi-shield-x me-2"></i> Blacklisted Records
           </router-link>
         </li>
-        
+
         <hr class="border-white-50 my-3">
-        
-        <li class="nav-item">
-          <a class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight" 
-             href="#patient-section">
-            <i class="bi bi-people me-2"></i> Patients
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight" 
-             href="#doctor-section">
-            <i class="bi bi-person-badge me-2"></i> Doctors
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight" 
-             href="#department-section">
-            <i class="bi bi-diagram-3 me-2"></i> Departments
-          </a>
-        </li>
+
       </ul>
 
       <div class="mt-auto pt-3 border-top border-white-50">
@@ -161,7 +147,8 @@
                     </td>
                     <td>
                       <div class="d-flex align-items-center">
-                        <div class="bg-danger bg-opacity-10 rounded-circle p-2 me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                        <div class="bg-danger bg-opacity-10 rounded-circle p-2 me-3"
+                          style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
                           <i class="bi bi-person-fill text-danger"></i>
                         </div>
                         <div>
@@ -243,7 +230,8 @@
                     </td>
                     <td>
                       <div class="d-flex align-items-center">
-                        <div class="bg-warning bg-opacity-10 rounded-circle p-2 me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                        <div class="bg-warning bg-opacity-10 rounded-circle p-2 me-3"
+                          style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
                           <i class="bi bi-person-fill text-warning"></i>
                         </div>
                         <div>
@@ -262,7 +250,8 @@
                       </span>
                     </td>
                     <td class="text-center">
-                      <span class="badge" :class="patient.gender === 'Male' ? 'bg-primary bg-opacity-10 text-primary' : 'bg-danger bg-opacity-10 text-danger'">
+                      <span class="badge"
+                        :class="patient.gender === 'Male' ? 'bg-primary bg-opacity-10 text-primary' : 'bg-danger bg-opacity-10 text-danger'">
                         <i class="bi" :class="patient.gender === 'Male' ? 'bi-gender-male' : 'bi-gender-female'"></i>
                         {{ patient.gender || 'N/A' }}
                       </span>
@@ -292,41 +281,7 @@
   </div>
 </template>
 
-<style scoped>
-.hover-highlight:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
-  transition: background 0.3s ease;
-}
 
-.nav-link.router-link-active {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.table > tbody > tr:hover {
-  background-color: rgba(0, 0, 0, 0.02);
-}
-
-.card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
-}
-
-.btn {
-  transition: all 0.2s ease;
-}
-
-.btn:hover {
-  transform: translateY(-1px);
-}
-
-.badge {
-  font-weight: 500;
-}
-</style>
 
 <script>
 export default {
@@ -347,6 +302,10 @@ export default {
   },
 
   methods: {
+    logout() {
+      localStorage.removeItem('adminToken');
+      this.$router.push('/');
+    },
     async fetchDoctors() {
       const response = await fetch('/api/doctor', {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('adminToken')}` }
@@ -391,3 +350,39 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.hover-highlight:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  transition: background 0.3s ease;
+}
+
+.nav-link.router-link-active {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.table>tbody>tr:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+}
+
+.btn {
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.badge {
+  font-weight: 500;
+}
+</style>

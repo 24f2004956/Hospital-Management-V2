@@ -17,7 +17,7 @@ class PDFReportAPI(Resource):
         if current_user.get("role") != "admin":
             return {"message": "Access Denied"}, 403
 
-        month = request.args.get('month')  # Format: YYYY-MM
+        month = request.args.get('month')  #  YYYY-MM
         if not month:
             return {"message": "Month parameter is required. Example: ?month=2025-01"}, 400
 

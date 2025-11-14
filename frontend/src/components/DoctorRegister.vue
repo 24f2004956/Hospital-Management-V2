@@ -35,24 +35,7 @@
         
         <hr class="border-white-50 my-3">
         
-        <li class="nav-item">
-          <a class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight" 
-             href="#patient-section">
-            <i class="bi bi-people me-2"></i> Patients
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight" 
-             href="#doctor-section">
-            <i class="bi bi-person-badge me-2"></i> Doctors
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight" 
-             href="#department-section">
-            <i class="bi bi-diagram-3 me-2"></i> Departments
-          </a>
-        </li>
+      
       </ul>
 
       <div class="mt-auto pt-3 border-top border-white-50">
@@ -112,7 +95,7 @@
                       v-model="name" 
                       class="form-control form-control-lg" 
                       id="name" 
-                      placeholder="Dr. John Doe"
+                      placeholder="Dr. Munna Bhai"
                       required
                       style="border-radius: 10px;">
                     <small class="text-muted">Enter the doctor's complete name with title</small>
@@ -129,7 +112,7 @@
                       v-model="email" 
                       class="form-control form-control-lg" 
                       id="email" 
-                      placeholder="doctor@hospital.com"
+                      placeholder="munna@hospital.com"
                       required
                       style="border-radius: 10px;">
                     <small class="text-muted">Professional email for system access and communications</small>
@@ -275,61 +258,7 @@
 </template>
 
 
-<style scoped>
-.hover-highlight:hover {
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: white !important;
-}
 
-.sidebar {
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-}
-
-.card {
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.form-control:focus,
-.form-select:focus {
-  border-color: #198754;
-  box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.15);
-}
-
-.btn {
-  transition: all 0.2s;
-  font-weight: 500;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.alert {
-  animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.position-relative .btn {
-  box-shadow: none !important;
-}
-
-.position-relative .btn:hover {
-  transform: none;
-  background-color: transparent !important;
-}
-</style>
 
 <script>
 export default {
@@ -347,6 +276,10 @@ export default {
         }
     },
     methods: {
+       logout() {
+      localStorage.removeItem('adminToken');
+      this.$router.push('/');
+    },
         async registerDoctor() {
             this.errorMessage = null;
             this.successMessage = null;
@@ -404,3 +337,59 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.hover-highlight:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+}
+
+.sidebar {
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #198754;
+  box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.15);
+}
+
+.btn {
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.alert {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.position-relative .btn {
+  box-shadow: none !important;
+}
+
+.position-relative .btn:hover {
+  transform: none;
+  background-color: transparent !important;
+}
+</style>

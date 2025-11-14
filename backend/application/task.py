@@ -102,7 +102,6 @@ def monthly_report():
         doctors = Doctor.query.all()
 
         for doctor in doctors:
-            # Fetch appointments for that doctor in previous month
             appointments = (
                 Appointment.query
                 .filter_by(doctor_id=doctor.id)
@@ -112,7 +111,7 @@ def monthly_report():
             )
 
             if not appointments:
-                continue  # Skip if no appointments this month
+                continue  
 
 
             with open(template_path, "r") as file:

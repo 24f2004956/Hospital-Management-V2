@@ -2,7 +2,8 @@
   <!-- Modern Sidebar Navigation -->
   <div class="d-flex min-vh-100">
     <!-- Sidebar -->
-    <nav class="sidebar bg-dark text-white d-flex flex-column p-3" style="width: 260px; position: fixed; height: 100vh; overflow-y: auto;">
+    <nav class="sidebar bg-dark text-white d-flex flex-column p-3"
+      style="width: 260px; position: fixed; height: 100vh; overflow-y: auto;">
       <div class="mb-4">
         <h4 class="fw-bold text-white mb-0">
           <i class="bi bi-hospital"></i> Admin Portal
@@ -12,47 +13,33 @@
 
       <ul class="nav flex-column gap-2">
         <li class="nav-item">
-          <router-link to="/admin-dashboard" class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight">
+          <router-link to="/admin-dashboard"
+            class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight">
             <i class="bi bi-speedometer2 me-2"></i> Dashboard
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/create-department" class="nav-link text-white rounded d-flex align-items-center py-2 px-3" 
-                       style="background: rgba(255,255,255,0.1);">
+          <router-link to="/create-department" class="nav-link text-white rounded d-flex align-items-center py-2 px-3"
+            style="background: rgba(255,255,255,0.1);">
             <i class="bi bi-building me-2"></i> Create Department
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/doctor-register" class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight">
+          <router-link to="/doctor-register"
+            class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight">
             <i class="bi bi-person-plus me-2"></i> Register Doctor
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/blacklisted" class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight">
+          <router-link to="/blacklisted"
+            class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight">
             <i class="bi bi-shield-x me-2"></i> Blacklisted Records
           </router-link>
         </li>
-        
+
         <hr class="border-white-50 my-3">
-        
-        <li class="nav-item">
-          <a class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight" 
-             href="#patient-section">
-            <i class="bi bi-people me-2"></i> Patients
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight" 
-             href="#doctor-section">
-            <i class="bi bi-person-badge me-2"></i> Doctors
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white-50 rounded d-flex align-items-center py-2 px-3 hover-highlight" 
-             href="#department-section">
-            <i class="bi bi-diagram-3 me-2"></i> Departments
-          </a>
-        </li>
+
+
       </ul>
 
       <div class="mt-auto pt-3 border-top border-white-50">
@@ -90,8 +77,9 @@
             <div class="card border-0 shadow-sm">
               <div class="card-body p-4">
                 <div class="d-flex align-items-center mb-4">
-                  <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
-                       style="width: 50px; height: 50px;">
+                  <div
+                    class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3"
+                    style="width: 50px; height: 50px;">
                     <i class="bi bi-building text-primary fs-4"></i>
                   </div>
                   <div>
@@ -107,14 +95,8 @@
                       <i class="bi bi-tag me-1 text-primary"></i> Department Name
                       <span class="text-danger">*</span>
                     </label>
-                    <input 
-                      type="text" 
-                      v-model="name" 
-                      class="form-control form-control-lg" 
-                      id="name" 
-                      placeholder="e.g., Cardiology, Pediatrics, Emergency"
-                      required
-                      style="border-radius: 10px;">
+                    <input type="text" v-model="name" class="form-control form-control-lg" id="name"
+                      placeholder="e.g., Cardiology, Pediatrics, Emergency" required style="border-radius: 10px;">
                     <small class="text-muted">Enter a clear and descriptive name for the department</small>
                   </div>
 
@@ -124,39 +106,34 @@
                       <i class="bi bi-text-left me-1 text-primary"></i> Description
                       <span class="text-danger">*</span>
                     </label>
-                    <textarea 
-                      v-model="description" 
-                      class="form-control form-control-lg" 
-                      id="description" 
-                      rows="5" 
+                    <textarea v-model="description" class="form-control form-control-lg" id="description" rows="5"
                       placeholder="Provide a detailed description of the department's services and specialties..."
-                      required
-                      style="border-radius: 10px;"></textarea>
+                      required style="border-radius: 10px;"></textarea>
                     <small class="text-muted">Describe the department's purpose and services offered</small>
                   </div>
 
                   <!-- Alert Messages -->
-                  <div v-if="errorMessage" class="alert alert-danger d-flex align-items-center" role="alert" style="border-radius: 10px;">
+                  <div v-if="errorMessage" class="alert alert-danger d-flex align-items-center" role="alert"
+                    style="border-radius: 10px;">
                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
                     <div>{{ errorMessage }}</div>
                   </div>
 
-                  <div v-if="successMessage" class="alert alert-success d-flex align-items-center" role="alert" style="border-radius: 10px;">
+                  <div v-if="successMessage" class="alert alert-success d-flex align-items-center" role="alert"
+                    style="border-radius: 10px;">
                     <i class="bi bi-check-circle-fill me-2"></i>
                     <div>{{ successMessage }}</div>
                   </div>
 
                   <!-- Action Buttons -->
                   <div class="d-flex gap-3 mt-4">
-                    <button 
-                      type="submit" 
+                    <button type="submit"
                       class="btn btn-primary btn-lg flex-grow-1 d-flex align-items-center justify-content-center gap-2"
                       style="border-radius: 10px;">
                       <i class="bi bi-plus-circle"></i>
                       Create Department
                     </button>
-                    <router-link 
-                      to="/admin-dashboard" 
+                    <router-link to="/admin-dashboard"
                       class="btn btn-outline-secondary btn-lg d-flex align-items-center justify-content-center gap-2"
                       style="border-radius: 10px; min-width: 120px;">
                       <i class="bi bi-x-circle"></i>
@@ -190,6 +167,58 @@
     </div>
   </div>
 </template>
+
+
+
+<script>
+export default {
+  name: 'CreateDepartment',
+  data() {
+    return {
+      name: '',
+      description: '',
+      errorMessage: null,
+      successMessage: null,
+    }
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('adminToken');
+      this.$router.push('/');
+    },
+    async createDepartment() {
+      this.errorMessage = null;
+      this.successMessage = null;
+      const payload = {
+        name: this.name,
+        description: this.description
+      };
+      try {
+        const response = await fetch('/api/department', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+          },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+
+        if (!response.ok) {
+          this.errorMessage = result.message;
+        } else {
+          this.successMessage = result.message;
+          alert(result.message);
+          this.$router.push('/admin-dashboard');
+        }
+      } catch (error) {
+        this.errorMessage = 'Unable to connect to the server. Please try again later.';
+      }
+    },
+
+  },
+}
+</script>
 
 <style scoped>
 .hover-highlight:hover {
@@ -230,55 +259,10 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 </style>
-
-<script>
-export default {
-    name: 'CreateDepartment',
-    data() {
-        return {
-            name: '',
-            description: '',
-            errorMessage: null,
-            successMessage: null,
-        }
-    },
-    methods: {
-        async createDepartment() {
-            this.errorMessage = null;
-            this.successMessage = null;
-            const payload = {
-                name: this.name,
-                description: this.description 
-            };
-            try {
-                const response = await fetch('/api/department', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
-                    },
-                    body: JSON.stringify(payload)
-                });
-                const result = await response.json();
-
-                if (!response.ok) {
-                    this.errorMessage = result.message;
-                } else {
-                    this.successMessage = result.message;
-                    alert(result.message);
-                    this.$router.push('/admin-dashboard');
-                }
-            } catch (error) {
-                this.errorMessage = 'Unable to connect to the server. Please try again later.';
-            }
-        },
-       
-    }, 
-}
-</script>

@@ -428,7 +428,7 @@ export default {
     },
 
     async downloadPDF() {
-            const month = "2025-11"; // You can use a date picker to make dynamic
+            const month = "2025-11"; // can use a date picker to make dynamic
 
             const response = await fetch(`/api/reports/monthly?month=${month}`, {
                 method: 'GET',

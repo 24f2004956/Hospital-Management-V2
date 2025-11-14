@@ -5,15 +5,14 @@ from ..models import db, Doctor
 from ..api1 import cache
 
 class DoctorApi(Resource):
-    #read
+ 
     @jwt_required()
     def get(self):
-        # Get optional query param for department
+       
         department_id = request.args.get('department_id', type=int)
 
         query = Doctor.query
 
-        # Filter by department if provided
         if department_id:
             query = query.filter_by(department_id=department_id)
 
@@ -22,11 +21,11 @@ class DoctorApi(Resource):
         if not doctors:
             return {'message': 'No doctors found for this department'}, 404
 
-        # Return list of doctors
+      
         return [d.convert_to_json() for d in doctors], 200
     
     
-    #create
+   
     @jwt_required()
     def post(self):
         current_user=get_jwt()
@@ -57,7 +56,7 @@ class DoctorApi(Resource):
         db.session.commit()
         return {'message' : 'Doctor registered successfully'}, 201     
 
-    # update 
+    
     @jwt_required()
     def put(self, doctor_id):
         current_user=get_jwt()
@@ -90,7 +89,7 @@ class DoctorApi(Resource):
         db.session.commit()
         return {'message' : 'Doctor details updated successfully'}, 200    
      
-     #delete
+    
     @jwt_required()
     def delete(self, doctor_id):
         current_user=get_jwt()
@@ -116,7 +115,7 @@ class DoctorDetailApi(Resource):
 class DoctorProfileUpdateAPI(Resource):
     @jwt_required()
     def get(self):
-        # Get current doctor info
+        
         current_user = get_jwt()
         doctor = Doctor.query.get(current_user.get("sub"))
         if not doctor:

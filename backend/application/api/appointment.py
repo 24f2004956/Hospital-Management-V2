@@ -57,7 +57,7 @@ class AppointmentApi(Resource):
             'appointment': new_appointment.convert_to_json()
         }, 201
     
-# rest of the appointment jobs i.e delete, update, and fetch (get to be updated accordingly for now its ai logic and ofcource it is not correct )
+
     @jwt_required()
     def delete(self, appointment_id):
         current_user = get_jwt()
@@ -66,7 +66,6 @@ class AppointmentApi(Resource):
         if not appointment:
             return {'message': 'Appointment not found.'}, 404
 
-        # Only the patient who booked it or an admin can cancel
         print(get_jwt())
         if current_user.get('role') not in ['admin', 'patient'] or (
             current_user.get('role') == 'patient' and appointment.patient_id != int(current_user.get('sub'))):
@@ -77,7 +76,7 @@ class AppointmentApi(Resource):
 
         appointment.status = 'Cancelled'
 
-        # Update the slot back to 'available'
+
         slot = DoctorAvailability.query.filter_by(
             doctor_id=appointment.doctor_id,
             date=appointment.date,
@@ -98,7 +97,7 @@ class AppointmentApi(Resource):
         if not appointment:
             return {'message': 'Appointment not found.'}, 404
 
-        # Only doctor of that appointment or admin can update
+
         if current_user.get('role') == 'doctor' and appointment.doctor_id != int(current_user.get('sub')):
             return {'message': 'You are not authorized to update this appointment.'}, 403
 
@@ -111,7 +110,7 @@ class AppointmentApi(Resource):
         appointment.status = updated_status
         appointment.reason = data.get('reason', appointment.reason)
 
-        # Sync slot status with appointment status
+
         slot = DoctorAvailability.query.filter_by(
             doctor_id=appointment.doctor_id,
             date=appointment.date,
@@ -140,7 +139,7 @@ class AppointmentApi(Resource):
             appointments = Appointment.query.filter(Appointment.patient_id == int(current_user.get('sub')),Appointment.date >= date.today(),Appointment.status == 'Booked').all()
         elif role == 'doctor':
             appointments = Appointment.query.filter(Appointment.doctor_id == int(current_user.get('sub')),Appointment.date >= date.today(),Appointment.status == 'Booked').all()
-        else:  # admin
+        else: 
             appointments = Appointment.query.filter(Appointment.date >= date.today(), Appointment.status == 'Booked'  ).all()
         appointment_json = []
         for appointment in appointments:
@@ -153,13 +152,13 @@ class AppointmentPaymentAPI(Resource):
     def post(self, appointment_id):
         current_user = get_jwt()
 
-        # Only patients can mark payment
+
         if current_user.get('role') != 'patient':
             return {'message': 'Only patients can update payment'}, 403
 
         appointment = Appointment.query.filter_by(
             id=appointment_id,
-            patient_id=current_user.get('sub')  # Patient must own the appointment
+            patient_id=current_user.get('sub')  
         ).first()
 
         if not appointment:
@@ -168,7 +167,6 @@ class AppointmentPaymentAPI(Resource):
         if appointment.payment_status == "paid":
             return {'message': 'Payment already completed'}, 400
         
-        # Get fee from corresponding slot
         slot = DoctorAvailability.query.filter(
             DoctorAvailability.doctor_id == appointment.doctor_id,
             DoctorAvailability.date == appointment.date,
@@ -179,9 +177,9 @@ class AppointmentPaymentAPI(Resource):
         if not slot:
             return {'message': 'Slot not found for this appointment'}, 400
 
-        # Update payment fields
+       
         appointment.payment_status = "paid"
-        appointment.amount_paid = slot.fee  # or slot.price if your model uses price
+        appointment.amount_paid = slot.fee  
 
         db.session.commit()
 

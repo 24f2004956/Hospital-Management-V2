@@ -203,7 +203,6 @@ export default {
         if (!response.ok) {
           this.errorMessage = result.message;
         } else {
-          // Success notification could be added here
           localStorage.setItem('doctorToken', result.token);
           localStorage.setItem('role', result.user_role);
           localStorage.setItem('username', result.user_name);

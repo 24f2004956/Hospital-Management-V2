@@ -22,7 +22,7 @@ class DoctorAvailabilityAPI(Resource):
         data = request.get_json()
         slot_id = data.get('slot_id')
         date_str = data.get('date')
-        fee = data.get('fee', 0)  # ✅ NEW FIELD
+        fee = data.get('fee', 0)  
 
         if slot_id not in SLOTS:
             return {'message': 'Invalid slot ID'}, 400
@@ -36,7 +36,6 @@ class DoctorAvailabilityAPI(Resource):
         if not (today <= avail_date <= today + timedelta(days=7)):
             return {'message': 'Date must be within next 7 days'}, 400
 
-        # ✅ Prevent Duplicate Slot
         existing = DoctorAvailability.query.filter_by(
             doctor_id=current_user.get('sub'),
             date=avail_date,
@@ -52,15 +51,13 @@ class DoctorAvailabilityAPI(Resource):
             date=avail_date,
             start_time=start_time,
             end_time=end_time,
-            fee=fee     # ✅ SAVE FEE
+            fee=fee     
         )
         db.session.add(new_slot)
         db.session.commit()
         return {'message': 'Availability added successfully'}, 201
 
 
-
-    # Get doctor availability (patients or doctors can view)
     @jwt_required()
     def get(self):
         current_user = get_jwt()
@@ -108,7 +105,7 @@ class DoctorAvailabilityWeekAPI(Resource):
         data = request.get_json()
         date_str = data.get('date')
         slot_id = data.get('slot_id')
-        fee = data.get('fee', 0)  # ✅ NEW FIELD
+        fee = data.get('fee', 0) 
 
         if slot_id not in SLOTS:
             return {'message': 'Invalid slot ID'}, 400
@@ -135,7 +132,7 @@ class DoctorAvailabilityWeekAPI(Resource):
             date=avail_date,
             start_time=start_time,
             end_time=end_time,
-            fee=fee  # ✅ SAVE FEE
+            fee=fee  
         )
         db.session.add(new_slot)
         db.session.commit()

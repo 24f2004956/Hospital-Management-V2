@@ -1,0 +1,212 @@
+openapi: 3.0.0
+info:
+  title: Hospital Management System API
+  version: 1.0.0
+  description: API specification for the Hospital Management backend service.
+
+servers:
+  - url: /api
+
+paths:
+
+  /welcome:
+    get:
+      summary: Welcome route
+      description: Basic API health check.
+      responses:
+        '200':
+          description: API is running.
+
+  /login:
+    post:
+      summary: User Login
+      description: Authenticate user and return session/token.
+      responses:
+        '200':
+          description: Login successful.
+
+  /account/{account_type}/{account_id}:
+    get:
+      summary: Fetch account details
+      parameters:
+        - in: path
+          name: account_type
+          required: true
+          schema:
+            type: string
+            enum: [patient, doctor, admin]
+        - in: path
+          name: account_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Account data returned.
+
+  /register:
+    post:
+      summary: Register a new user
+      responses:
+        '201':
+          description: User registered successfully.
+
+  /doctor:
+    get:
+      summary: Fetch all doctors
+    post:
+      summary: Add a new doctor
+
+  /doctor/{doctor_id}:
+    get:
+      summary: Get doctor details
+    put:
+      summary: Update doctor details
+    delete:
+      summary: Delete a doctor
+    parameters:
+      - in: path
+        name: doctor_id
+        required: true
+        schema:
+          type: integer
+
+  /doctor/me:
+    get:
+      summary: Get logged-in doctor's profile
+
+  /doctor/profile-update:
+    put:
+      summary: Update logged-in doctor's profile
+
+  /doctor-details/{doctor_id}:
+    get:
+      summary: Get doctor details with department and availability
+    parameters:
+      - in: path
+        name: doctor_id
+        required: true
+        schema:
+          type: integer
+
+  /patient:
+    get:
+      summary: Get all patients
+    post:
+      summary: Add a new patient
+
+  /patient/{patient_id}:
+    get:
+      summary: Get patient details
+    put:
+      summary: Update patient details
+    delete:
+      summary: Delete patient
+    parameters:
+      - in: path
+        name: patient_id
+        required: true
+        schema:
+          type: integer
+
+  /patient/profile-update:
+    put:
+      summary: Update patient profile
+
+  /department:
+    get:
+      summary: Get all departments
+    post:
+      summary: Add new department
+
+  /department/{department_id}:
+    get:
+      summary: Get department details
+    put:
+      summary: Update department
+    delete:
+      summary: Delete department
+    parameters:
+      - in: path
+        name: department_id
+        required: true
+        schema:
+          type: integer
+
+  /appointment:
+    get:
+      summary: Get all appointments
+    post:
+      summary: Book an appointment
+
+  /appointment/{appointment_id}:
+    get:
+      summary: Get appointment details
+    put:
+      summary: Update appointment
+    delete:
+      summary: Cancel appointment
+    parameters:
+      - in: path
+        name: appointment_id
+        required: true
+        schema:
+          type: integer
+
+  /appointments/{appointment_id}/pay:
+    post:
+      summary: Process appointment payment
+      parameters:
+        - in: path
+          name: appointment_id
+          required: true
+          schema:
+            type: integer
+
+  /treatment/{appointment_id}:
+    post:
+      summary: Add treatment to appointment
+      parameters:
+        - in: path
+          name: appointment_id
+          required: true
+          schema:
+            type: integer
+
+  /treatment/doctor:
+    get:
+      summary: Fetch doctor’s treatment history
+
+  /treatment/patient:
+    get:
+      summary: Fetch patient’s treatment history
+
+  /treatment/admin:
+    get:
+      summary: Fetch all treatments (admin)
+
+  /treatment/export:
+    get:
+      summary: Export treatment data
+
+  /availability:
+    get:
+      summary: Get doctor availability
+    post:
+      summary: Add doctor availability
+
+  /availability-week:
+    get:
+      summary: Get weekly doctor availability
+
+  /report/appointments-trend:
+    get:
+      summary: View appointment trend analytics
+
+  /report/department-demand:
+    get:
+      summary: View department demand analytics
+
+  /reports/monthly:
+    get:
+      summary: Generate monthly PDF report
