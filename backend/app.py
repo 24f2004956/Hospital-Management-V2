@@ -97,4 +97,4 @@ if __name__=='__main__':
     #db.drop_all() #toggle b/w drop_all() and add admin
     add_admin()
     db.create_all()
-    app.run(debug=True)
+    app.run()
